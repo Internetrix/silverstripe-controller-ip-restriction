@@ -1,4 +1,6 @@
-#Introduction
+# Introduction
+
+
 This module allows SilverStripe developers to restrict access to arbitrary-defined controllers, according to a User's IP address. Requests to specific Controllers will be denied if a user's IP does not match the provided list of allowed IP addresses.
 
 
@@ -30,7 +32,7 @@ Internetrix\CMSAdminIPRestriction\AllowedIPMiddleware:
     - SilverStripe\Dev\DevelopmentAdmin
 ``` 
 
-3. Define which IP addresses are allowed in .env file, using SS_ADMIN_ALLOWED_IPS variable. For multiple IP addresses, use a comma-limited list.
+3. Define which IP addresses are allowed in `.env` file, using a `SS_ADMIN_ALLOWED_IPS` variable. For multiple IP addresses, use a comma-limited list.
 ```
 SS_ADMIN_ALLOWED_IPS='123.0.0.1,248.1.1.1'
 ```
@@ -43,7 +45,7 @@ SS_ADMIN_ALLOWED_IPS='123.0.0.1,248.1.1.1'
   `CanBypassIPRestriction` value for the user can be checked. If the CMS admin or another Controller is restricted, a user must first log-in to SilverStripe via a non-restricted page (i.e A Only Logged-in Users Can View Page) before the IP Bypass will be applied.
 
 ## Troubleshooting
-- If no IP address is specified in .env or via the SiteConfig, the restricted controllers will be inaccessible.
+- If no IP address is specified in `.env` or via the `SiteConfig`, the restricted controllers will be inaccessible.
 
 ## Todo
 - Currently, IP matching is based on exact matching IP address. Range, wildcard and CIDR is currently not supported and will included in the future. Pull requests welcome!
