@@ -1,0 +1,19 @@
+---
+Name: iprestriction
+After:
+  - '#coresecurity'
+---
+SilverStripe\Core\Injector\Injector:
+  SilverStripe\Control\Director:
+    properties:
+      Middlewares:
+        AllowedIPMiddleware: %$Internetrix\CMSAdminIPRestriction\AllowedIPMiddleware
+  Internetrix\CMSAdminIPRestriction\AllowedIPMiddleware:
+    properties:
+      allowedIPs: '`SS_ADMIN_ALLOWED_IPS`'
+SilverStripe\Security\Member:
+  extensions:
+    - Internetrix\CMSAdminIPRestriction\MemberExtension
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - Internetrix\CMSAdminIPRestriction\SiteConfigIPExtension

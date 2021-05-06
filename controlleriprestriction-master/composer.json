@@ -1,0 +1,33 @@
+{
+  "name": "internetrix/silverstripe-controller-ip-restriction",
+  "description": "Restrict SilverStripe controllers to specific IP address",
+  "type": "silverstripe-vendormodule",
+  "keywords": [
+    "silverstripe",
+    "ip restriction",
+    "restrict ip",
+    "ip address",
+    "controller restriction"
+  ],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Jonathon Su",
+      "email": "jonathon.su@internetrix.com.au"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "silverstripe/framework" : "^4.0.0",
+    "silverstripe/cms" : "^4.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Internetrix\\CMSAdminIPRestriction\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "extra": {
+    "installer-name": "controller-ip-restriction"
+  }
+}
