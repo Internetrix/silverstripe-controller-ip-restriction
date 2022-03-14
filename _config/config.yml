@@ -7,7 +7,7 @@ SilverStripe\Core\Injector\Injector:
   SilverStripe\Control\Director:
     properties:
       Middlewares:
-        AllowedIPMiddleware: %$Internetrix\CMSAdminIPRestriction\AllowedIPMiddleware
+        AllowedIPMiddleware: '%$Internetrix\CMSAdminIPRestriction\AllowedIPMiddleware'
   Internetrix\CMSAdminIPRestriction\AllowedIPMiddleware:
     properties:
       allowedIPs: '`SS_ADMIN_ALLOWED_IPS`'
