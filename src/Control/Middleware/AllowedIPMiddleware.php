@@ -47,7 +47,7 @@ class AllowedIPMiddleware implements HTTPMiddleware
      * @return array
      */
 
-    public function getAllowedIPs()
+    public function getAllowedIPs(): array
     {
         return $this->allowedIPs;
     }
@@ -56,19 +56,21 @@ class AllowedIPMiddleware implements HTTPMiddleware
      * @param $allowedIPs
      * @return $this
      */
-    public function setAllowedIPs($allowedIPs)
+    public function setAllowedIPs($allowedIPs): AllowedIPMiddleware
     {
         if (is_string($allowedIPs)) {
             $allowedIPs = explode(',', $allowedIPs);
         }
 
         $subnetIps = [];
-        foreach ($allowedIPs as $k => $allowedIP){
-            if(stripos($allowedIP, "/")){
-                $ipsInRange = $this->getEachIpInRange($allowedIP);
-                if(count($ipsInRange)){
-                    $subnetIps = array_merge($subnetIps, $ipsInRange);
-                    unset($allowedIPs[$k]);
+        if($allowedIPs){
+            foreach ($allowedIPs as $k => $allowedIP){
+                if(stripos($allowedIP, "/")){
+                    $ipsInRange = $this->getEachIpInRange($allowedIP);
+                    if(count($ipsInRange)){
+                        $subnetIps = array_merge($subnetIps, $ipsInRange);
+                        unset($allowedIPs[$k]);
+                    }
                 }
             }
         }
