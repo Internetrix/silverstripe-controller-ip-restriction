@@ -47,7 +47,7 @@ class AllowedIPMiddleware implements HTTPMiddleware
      * @return array
      */
 
-    public function getAllowedIPs()
+    public function getAllowedIPs(): array
     {
         return $this->allowedIPs;
     }
@@ -56,14 +56,69 @@ class AllowedIPMiddleware implements HTTPMiddleware
      * @param $allowedIPs
      * @return $this
      */
-    public function setAllowedIPs($allowedIPs)
+    public function setAllowedIPs($allowedIPs): AllowedIPMiddleware
     {
         if (is_string($allowedIPs)) {
             $allowedIPs = explode(',', $allowedIPs);
         }
+
+        $subnetIps = [];
+        if($allowedIPs){
+            foreach ($allowedIPs as $k => $allowedIP){
+                if(stripos($allowedIP, "/")){
+                    $ipsInRange = $this->getEachIpInRange($allowedIP);
+                    if(count($ipsInRange)){
+                        $subnetIps = array_merge($subnetIps, $ipsInRange);
+                        unset($allowedIPs[$k]);
+                    }
+                }
+            }
+        }
+
+        if(count($subnetIps)){
+            $allowedIPs = array_merge($allowedIPs, $subnetIps);
+        }
+
         $this->allowedIPs = $allowedIPs;
 
         return $this;
+    }
+
+    /**
+     * @param $cidr
+     * @return array
+     */
+    public function getIpRange(  $cidr): array
+    {
+
+        list($ip, $mask) = explode('/', $cidr);
+
+        $maskBinStr = str_repeat("1", $mask ) . str_repeat("0", 32-$mask );      //net mask binary string
+        $inverseMaskBinStr = str_repeat("0", $mask ) . str_repeat("1",  32-$mask ); //inverse mask
+
+        $ipLong = ip2long( $ip );
+        $ipMaskLong = bindec( $maskBinStr );
+        $inverseIpMaskLong = bindec( $inverseMaskBinStr );
+        $netWork = $ipLong & $ipMaskLong;
+
+        $start = $netWork+1;//ignore network ID(eg: 192.168.1.0)
+
+        $end = ($netWork | $inverseIpMaskLong) -1 ; //ignore broadcast IP(eg: 192.168.1.255)
+        return ['firstIP' => $start, 'lastIP' => $end ];
+    }
+
+    /**
+     * @param $cidr
+     * @return array
+     */
+    public function getEachIpInRange ( $cidr): array
+    {
+        $ips = [];
+        $range = $this->getIpRange($cidr);
+        for ($ip = $range['firstIP']; $ip <= $range['lastIP']; $ip++) {
+            $ips[] = long2ip($ip);
+        }
+        return $ips;
     }
 
     /**
